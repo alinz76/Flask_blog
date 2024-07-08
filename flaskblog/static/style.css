@@ -13,7 +13,7 @@ body {
   }
   
   .bg-steel {
-    background-color: #315892;
+    background-color: hsl(147, 64%, 31%);
   }
   
   .site-header .navbar-nav .nav-link {
@@ -97,8 +97,8 @@ body {
   }
 
   .editBtn {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 20px;
     border: none;
     background-color: rgb(93, 93, 116);
@@ -160,7 +160,7 @@ body {
     -ms-transform: rotate(-15deg) translateX(5px);
     transform: rotate(-15deg) translateX(5px);
   }
-  .editBtn::after {
+  /* .editBtn::after {
     content: "";
     width: 25px;
     height: 1.5px;
@@ -180,7 +180,7 @@ body {
     transition: -webkit-transform 0.5s ease-out;
     transition: transform 0.5s ease-out;
     transition: transform 0.5s ease-out, -webkit-transform 0.5s ease-out;
-  }
+  } */
   .editBtn:hover::after {
     -webkit-transform: scaleX(1);
     -ms-transform: scaleX(1);
@@ -206,17 +206,17 @@ body {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
-    width: 45px;
-    height: 45px;
+    width: 35px;
+    height: 35px;
     border-radius: 15px;
-    background-color: rgb(255, 95, 95);
+    background-color: rgb(250, 69, 69);
     cursor: pointer;
-    border: 3px solid rgb(255, 201, 201);
+    border: 1px solid rgb(255, 201, 201);
     -webkit-transition-duration: 0.3s;
     transition-duration: 0.3s;
   }
   .bin-bottom {
-    width: 15px;
+    width: 10px;
   }
   .bin-top {
     width: 17px;
