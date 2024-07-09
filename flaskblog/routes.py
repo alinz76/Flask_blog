@@ -83,7 +83,8 @@ def save_profile_picture(form_picture):
 def profile(username):
     form = UpdateAccountForm()
     page = request.args.get('page', 1, type=int)
-    pagination = Post.query.filter_by(author=current_user).order_by(Post.date_posted.desc()).paginate(page=page, per_page=3)
+    user = User.query.filter_by(username=username).first_or_404()
+    pagination = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).paginate(page=page, per_page=3)
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_profile_picture(form.picture.data)
@@ -97,7 +98,7 @@ def profile(username):
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_profile = url_for('static', filename='profile_pics/' + current_user.image_profile)
-    return render_template('profile.html', title="Profile", image_profile=image_profile, form=form, posts=pagination, pagination=pagination)
+    return render_template('profile.html', title="Profile", image_profile=image_profile, form=form, user=user, posts=pagination, pagination=pagination)
 
 
 @app.route("/post/add", methods=['GET', 'POST'])
