@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="content-section">
+        <h2>{{ user.username }}'s Posts</h2>
+        {% if posts %}
+        {% for post in posts %}
+        <article class="media content-section">
+            <div class="media-body">
+            <h2><a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.content }}</p>
+            </div>
+            <small class="text-muted">
+                {{ post.date_posted.strftime('%y/%m/%d %H:%M') }}
+            </small>
+        </article>
+        {% endfor %}
+        {% else %}
+            <div class="media-body">
+                <div class="article-metadata">
+                </div>
+                <p class="article-content">No Posts</p>
+            </div>
+        {% endif %}
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <!-- Check if there is a previous page -->
+            {% if pagination.has_prev %}
+            <li class="page-item">
+                <!-- If there is, create a link to the previous page -->
+                <a class="page-link" href="/profile/{{ user.username }}/?page=1">First</a>
+            </li>
+            {% endif %}
+            {% if pagination.pages > 1 %}
+                <!-- Loop through each page number provided by pagination.iter_pages() -->
+                {% for page_num in pagination.iter_pages() %}
+                    <!-- Check if the page number exists (not None) -->
+                    {% if page_num %}
+                    <!-- Check if the current page is not the active page -->
+                        {% if page_num != pagination.page %}
+                        <!-- Create a clickable link for the page number -->
+                        <li class="page-item"><a class="page-link" href="/profile/{{ user.username }}/?page={{ page_num }}">{{ page_num }}</a></li>
+                        {% else %}
+                        <!-- Highlight the current page as active and not clickable -->
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                        <!-- For gaps in the pagination links, show ellipsis -->
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Check if there is a next page -->
+                {% if pagination.has_next %}
+                    <li class="page-item">
+                        <!-- If there is, create a link to the next page -->
+                        <a class="page-link" href="/profile/{{ user.username }}/?page={{ pagination.pages }}">Last</a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </nav>
+{% endblock content %}
+{%  block sidebar %}
+    <div class="content-section">
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+                <legend class="border-bottom mb-4"><strong>{{ user.username }}'s Profile </strong></legend>
+                <div class="media">
+                    <img class="rounded-circle account-img" src="{{ image_profile }}">
+                    <div class="media-body">
+                        {% if user.email %}
+                            <p class="text-secondary">Email:<br>{{ user.email }}</p>
+                        {% else %}
+                            <p class="text-secondary">No Email</p><br>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if current_user == user %}
+                    <fieldset class="form-group">
+                        <div class="form-group">
+                            {{ form.username.label(class="form-control-label") }}
+                            {% if form.username.errors %}
+                            {{ form.username(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    <span>
+                                        {{ error }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                                {{ form.username(class="form-control form-control-lg") }}
+                            {% endif %}
+                            </div>
+                        <div class="form-group">
+                            {{ form.email.label(class="form-control-label") }}
+                            {% if form.email.errors %}
+                            {{ form.email(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    <span>
+                                        {{ error }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                                {{ form.email(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.picture.label() }}
+                            {{ form.picture(class="form-control-file") }}
+                            {% if form.picture.errors %}
+                                {% for error in form.picture.errors %}
+                                    <span class="text-danger">{{ error }}</span><br>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" type="submit">Update</button>
+                    </div>
+                {% endif %}
+        </form>
+    </div>
+    {% endblock sidebar %}
